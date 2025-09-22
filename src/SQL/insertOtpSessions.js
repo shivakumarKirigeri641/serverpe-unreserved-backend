@@ -1,0 +1,11 @@
+const bcrypt = require("bcryptjs");
+const insertOtpSessions = async (client, mobile_number, otp) => {
+  const salt = await bcrypt.genSalt(1);
+  const hasedotp = await bcrypt.hash(otp.toString(), salt);
+  await client.query(
+    "insert into spur_user_otp_session (mobile_number, hashed_otp) values ($1,$2)",
+    [mobile_number, hasedotp]
+  );
+};
+
+module.exports = insertOtpSessions;

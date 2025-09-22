@@ -3,17 +3,18 @@ const { connectDB } = require("./database/connectDB");
 const app = new express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
+const authRouter = require("./routers/authRouter");
 require("dotenv").config();
 app.use(cookieParser());
+app.use(express.json());
 app.use(
   cors({
     origin: "http://localhost:1234",
     credentials: true,
   })
 );
-app.post("/test", async (req, res) => {
-  res.send("test");
-});
+
+app.use("/", authRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfully.");
