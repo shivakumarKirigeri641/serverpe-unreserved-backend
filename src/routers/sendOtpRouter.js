@@ -15,17 +15,17 @@ sendOtpRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
   let client = null;
   try {
     let { mobile_number } = req?.body;
-    console.log(mobile_number);
     //1. verify mobilenumber
     if (!verifyMobileNumber(mobile_number)) {
       sendFailedResponse(res, "Invalid mobile number!");
     }
 
     //2. generate otp
-    const otp = getRandomOtp();
+    //const otp = getRandomOtp();
+    const otp = 1111;
 
     //3. call sms api
-    const result_of_sms = await sendOTPSMS(mobile_number, otp, 3);
+    /*const result_of_sms = await sendOTPSMS(mobile_number, otp, 3);
     if (!result_of_sms.success) {
       sendFailedResponse(
         200,
@@ -33,7 +33,7 @@ sendOtpRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
         result_of_sms,
         "Failed in sending OtP. Try again later"
       );
-    }
+    }*/
     //4. insert into otp_session
     const pool = await connectDB();
     client = await getPostgreClient(pool);
@@ -53,7 +53,7 @@ sendOtpRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
       200,
       res,
       "OTP sent successfully...",
-      result_of_sms.data
+      "hardcoded" //result_of_sms.data
     );
   } catch (err) {
     if (client) {
