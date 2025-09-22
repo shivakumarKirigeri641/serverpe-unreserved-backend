@@ -3,7 +3,8 @@ const { connectDB } = require("./database/connectDB");
 const app = new express();
 const cors = require("cors");
 const cookieParser = require("cookie-parser");
-const authRouter = require("./routers/authRouter");
+const sendOtpRouter = require("./routers/sendOtpRouter");
+const verifyOtpRouter = require("./routers/verifyOtpRouter");
 require("dotenv").config();
 app.use(cookieParser());
 app.use(express.json());
@@ -14,7 +15,8 @@ app.use(
   })
 );
 
-app.use("/", authRouter);
+app.use("/", sendOtpRouter);
+app.use("/", verifyOtpRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfully.");

@@ -1,8 +1,9 @@
+const express = require("express");
+const sendOtpRouter = express.Router();
 const {
   verifyMobileNumber,
   getPostgreClient,
   getRandomOtp,
-  authRouter,
   sendFailedResponse,
   connectDB,
   sendSuccessResponse,
@@ -10,7 +11,7 @@ const {
   insertOtpSessions,
 } = require("../utils/dependencies");
 //api for send-otp
-authRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
+sendOtpRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
   let client = null;
   try {
     let { mobile_number } = req?.body;
@@ -66,10 +67,4 @@ authRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
   }
 });
 
-//api for verify-otp
-authRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {});
-
-//api for logout
-authRouter.post("/unreserved-ticket/user/logout", async (req, res) => {});
-
-module.exports = authRouter;
+module.exports = sendOtpRouter;
