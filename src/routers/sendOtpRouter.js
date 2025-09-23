@@ -4,9 +4,7 @@ const {
   verifyMobileNumber,
   getPostgreClient,
   getRandomOtp,
-  sendFailedResponse,
   connectDB,
-  sendSuccessResponse,
   sendOTPSMS,
   insertOtpSessions,
 } = require("../utils/dependencies");
@@ -17,49 +15,50 @@ sendOtpRouter.post("/unreserved-ticket/user/send-otp", async (req, res) => {
     let { mobile_number } = req?.body;
     //1. verify mobilenumber
     if (!verifyMobileNumber(mobile_number)) {
-      sendFailedResponse(res, "Invalid mobile number!");
+      throw {
+        success: false,
+        message: "Invalid mobile number",
+        data: {},
+      };
     }
 
     //2. generate otp
     //const otp = getRandomOtp();
-    const otp = 1111;
+    const otp = 1234;
 
     //3. call sms api
     /*const result_of_sms = await sendOTPSMS(mobile_number, otp, 3);
     if (!result_of_sms.success) {
-      sendFailedResponse(
-        200,
-        res,
-        result_of_sms,
-        "Failed in sending OtP. Try again later"
-      );
+    throw {
+        success: false,
+        message: "Failed in sending OtP. Try again later",
+        data: result_of_sms,
+      };
     }*/
     //4. insert into otp_session
     const pool = await connectDB();
     client = await getPostgreClient(pool);
     if (!client) {
-      sendFailedResponse(
-        200,
-        res,
-        result_of_sms,
-        "Failed in sending OtP. Try again later"
-      );
+      throw {
+        success: false,
+        message: "Failed in sending OtP. Try again later",
+        data: {},
+      };
     }
     await client.query("BEGIN");
     await insertOtpSessions(client, mobile_number, otp);
     await client.query("COMMIT");
     //5. sendresponse 'otp sent'
-    sendSuccessResponse(
-      200,
-      res,
-      "OTP sent successfully...",
-      "hardcoded" //result_of_sms.data
-    );
+    res.status(200).json({
+      success: true,
+      message: "OTP sent successfully",
+      data: {},
+    });
   } catch (err) {
     if (client) {
       await client.query("ROLLBACK");
     }
-    sendFailedResponse(502, res, err, "Failed in sending-otp");
+    res.status(400).json(err);
   } finally {
     if (client) {
       await client.release();

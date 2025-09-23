@@ -1,5 +1,3 @@
-const { sendFailedResponse } = require("../responses/sendFailedResponse");
-const { connectDB } = require("../database/connectDB");
 const getPostgreClient = async (pool) => {
   let client = null;
   try {

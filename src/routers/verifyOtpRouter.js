@@ -4,29 +4,80 @@ const {
   verifyMobileNumber,
   getPostgreClient,
   getRandomOtp,
-  sendFailedResponse,
   connectDB,
-  sendSuccessResponse,
+  verifyOtpFormat,
   sendOTPSMS,
   insertOtpSessions,
+  verifyEnteredOtp,
 } = require("../utils/dependencies");
 verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
   let client = null;
   try {
     //1. verify mobile_number and otp
+    const { mobile_number, otp } = req?.body;
+    if (!mobile_number) {
+      throw {
+        success: false,
+        message: "Please provide mobile number!",
+        error_details: {},
+      };
+    }
+    if (!otp) {
+      throw {
+        success: false,
+        message: "Invalid otp!",
+        error_details: {},
+      };
+    }
+    if (!verifyMobileNumber(mobile_number)) {
+      throw {
+        success: false,
+        message: "Invalid mobile number!!!",
+        error_details: {},
+      };
+    }
+    if (!verifyOtpFormat(otp)) {
+      throw {
+        success: false,
+        message: "Invalid otp number!!!",
+        error_details: {},
+      };
+    }
     //2. check if otp is valid from query
-    //3. check if otp delay more then 3min
+    //& check if otp delay more then 3min
+    const pool = await connectDB();
+    client = await getPostgreClient(pool);
+    if (!client) {
+      throw {
+        err_details: {
+          success: false,
+          message: "S1omething went wrong!",
+          data: {},
+        },
+      };
+    }
+    const result = await verifyEnteredOtp(client, mobile_number, otp);
+    if (!result.status) {
+      throw {
+        success: false,
+        message: result?.err_message,
+        data: {},
+      };
+    }
     //4. if all good, delete otp session
     //4. create jwt token and attach to response
     //5. insert into token sessions
     //5. success msg
-    const pool = await connectDB();
-    client = await getPostgreClient(pool);
+    res.status(200).json({
+      success: true,
+      message: "test",
+      data: {},
+    });
   } catch (err) {
     if (client) {
       await client.query("ROLLBACK");
     }
-    sendFailedResponse(502, res, err, "Failed in sending-otp");
+    res.status(400).json(err);
   } finally {
     if (client) {
       await client.release();
