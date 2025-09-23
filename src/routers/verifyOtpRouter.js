@@ -1,3 +1,4 @@
+const createJwtToken = require("../utils/createJwtToken");
 const express = require("express");
 const verifyOtpRouter = express.Router();
 const {
@@ -10,6 +11,7 @@ const {
   insertOtpSessions,
   verifyEnteredOtp,
 } = require("../utils/dependencies");
+const insertToken = require("../SQL/insertToken");
 verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
   let client = null;
   try {
@@ -56,6 +58,7 @@ verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
         },
       };
     }
+    //4. if all good, delete otp session
     const result = await verifyEnteredOtp(client, mobile_number, otp);
     if (!result.status) {
       throw {
@@ -64,9 +67,14 @@ verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
         data: {},
       };
     }
-    //4. if all good, delete otp session
+
     //4. create jwt token and attach to response
+    const token = await createJwtToken(mobile_number);
     //5. insert into token sessions
+    await insertToken(client, mobile_number, token);
+    res.cookie("token", token, { maxAge: 5 * 60 * 1000 });
+    console.log(token);
+
     //5. success msg
     res.status(200).json({
       success: true,
