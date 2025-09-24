@@ -16,11 +16,11 @@ const insertSearchDetails = async (
     );
     const result_sourcename = await client.query(
       "select station_name from stations where code=$1",
-      [source_code]
+      [source_code.toUpperCase()]
     );
     const result_destinationname = await client.query(
       "select station_name from stations where code=$1",
-      [destination_code]
+      [destination_code.toUpperCase()]
     );
     const currentdateandtime = convert_timeStamp_without_timezoneToIndian(
       new Date()
@@ -39,6 +39,7 @@ const insertSearchDetails = async (
     );
     await client.query("COMMIT");
   } catch (err) {
+    console.log(err);
     await client.query("ROLLBACK");
     throw {
       success: false,

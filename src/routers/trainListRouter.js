@@ -68,7 +68,10 @@ trainListRouter.post(
       await insertSearchDetails(client, req, src, dest);
       res.status(200).json({
         success: true,
-        message: "stations fetched successfully",
+        message:
+          0 === result.rows.length
+            ? "No trains found!"
+            : "Train list fetched successfully.",
         data: result.rows,
       });
     } catch (err) {
