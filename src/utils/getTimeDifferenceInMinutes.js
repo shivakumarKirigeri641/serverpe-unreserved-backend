@@ -1,9 +1,11 @@
 const getTimeDifferenceInMinutes = (date1, date2) => {
+  date1 = new Date(date1).toLocaleString("en-IN", {
+    timeZone: "Asia/Kolkata",
+  });
   const t1 = parseIndianDate(date1);
   const t2 = parseIndianDate(date2);
 
   const diffMinutes = Math.floor((t1 - t2) / (1000 * 60));
-  console.log(diffMinutes); // 23
   return diffMinutes;
 };
 function parseIndianDate(str) {

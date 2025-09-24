@@ -5,6 +5,7 @@ const cors = require("cors");
 const cookieParser = require("cookie-parser");
 const sendOtpRouter = require("./routers/sendOtpRouter");
 const verifyOtpRouter = require("./routers/verifyOtpRouter");
+const stationsRouter = require("./routers/stationsRouter");
 require("dotenv").config();
 app.use(cookieParser());
 app.use(express.json());
@@ -17,6 +18,7 @@ app.use(
 
 app.use("/", sendOtpRouter);
 app.use("/", verifyOtpRouter);
+app.use("/", stationsRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfully.");

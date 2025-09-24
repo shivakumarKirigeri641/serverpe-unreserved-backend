@@ -3,7 +3,11 @@ const getPostgreClient = async (pool) => {
   try {
     client = await pool.connect();
   } catch (err) {
-    console.log("err:", err.message);
+    throw {
+      success: false,
+      message: "Unable to connect db",
+      data: err,
+    };
   }
   return client;
 };

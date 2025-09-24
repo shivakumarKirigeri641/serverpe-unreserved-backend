@@ -12,6 +12,7 @@ const {
   verifyEnteredOtp,
 } = require("../utils/dependencies");
 const insertToken = require("../SQL/insertToken");
+const deleteTokenSessionOnMobile = require("../SQL/deleteTokenSessionOnMobile");
 verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
   let client = null;
   try {
@@ -70,15 +71,16 @@ verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
 
     //4. create jwt token and attach to response
     const token = await createJwtToken(mobile_number);
+
+    //first delete if mobile number exists
+    await deleteTokenSessionOnMobile(client, mobile_number);
     //5. insert into token sessions
     await insertToken(client, mobile_number, token);
     res.cookie("token", token, { maxAge: 5 * 60 * 1000 });
-    console.log(token);
-
     //5. success msg
     res.status(200).json({
       success: true,
-      message: "test",
+      message: "Mobile and OTP verifed successfully.",
       data: {},
     });
   } catch (err) {
