@@ -8,6 +8,7 @@ const verifyOtpRouter = require("./routers/verifyOtpRouter");
 const stationsRouter = require("./routers/stationsRouter");
 const logoutRouter = require("./routers/logoutRouter");
 const trainListRouter = require("./routers/trainListRouter");
+const bookTicketRouter = require("./routers/bookTicketRouter");
 require("dotenv").config();
 app.use(cookieParser());
 app.use(express.json());
@@ -23,6 +24,7 @@ app.use("/", verifyOtpRouter);
 app.use("/", stationsRouter);
 app.use("/", logoutRouter);
 app.use("/", trainListRouter);
+app.use("/", bookTicketRouter);
 connectDB()
   .then(() => {
     console.log("Database connected successfully.");
