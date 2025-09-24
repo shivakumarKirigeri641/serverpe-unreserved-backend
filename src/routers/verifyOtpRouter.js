@@ -12,6 +12,8 @@ const {
   verifyEnteredOtp,
 } = require("../utils/dependencies");
 const insertToken = require("../SQL/insertToken");
+const checkAndinsertLogin = require("../SQL/checkAndinsertLogin");
+const insertLoginTracking = require("../SQL/insertLoginTracking");
 const deleteTokenSessionOnMobile = require("../SQL/deleteTokenSessionOnMobile");
 verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
   let client = null;
@@ -76,6 +78,7 @@ verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
     await deleteTokenSessionOnMobile(client, mobile_number);
     //5. insert into token sessions
     await insertToken(client, mobile_number, token);
+    const result_data = await checkAndinsertLogin(client, mobile_number);
     res.cookie("token", token, { maxAge: 5 * 60 * 1000 });
     //5. success msg
     res.status(200).json({

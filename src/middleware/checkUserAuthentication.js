@@ -20,7 +20,6 @@ const checkUserAuthentication = async (req, res, next) => {
       };
     }
     const result = await jwt.verify(token, process.env.SECRET_KEY);
-    console.log(result);
     const pool = await connectDB();
     client = await getPostgreClient(pool);
 

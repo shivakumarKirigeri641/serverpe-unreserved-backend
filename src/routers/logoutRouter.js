@@ -17,7 +17,6 @@ logoutRouter.post("/unreserved-ticket/user/logout", async (req, res) => {
       };
     }
     const result = await jwt.verify(token, process.env.SECRET_KEY);
-    console.log(result);
     const pool = await connectDB();
     client = await getPostgreClient(pool);
     const result_from_db = await getTokenDetails(client, token);
