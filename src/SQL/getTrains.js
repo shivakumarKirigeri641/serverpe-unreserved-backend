@@ -10,14 +10,11 @@ s1.station_code = $1 and
 s2.station_code=$2 and 
 c.gen=$3 and 
 (
-
-        -- Window does NOT cross midnight
         ( ((current_time AT TIME ZONE 'UTC' + interval '5 hours 30 minutes')::time + interval '2 hours') <= '24:00'::time
           AND s1.arrival > (current_time AT TIME ZONE 'UTC' + interval '5 hours 30 minutes')::time
           AND s1.arrival <= ((current_time AT TIME ZONE 'UTC' + interval '5 hours 30 minutes')::time + interval '2 hours')
         )
      OR
-        -- Window crosses midnight
         ( ((current_time AT TIME ZONE 'UTC' + interval '5 hours 30 minutes')::time + interval '2 hours') > '24:00'::time
           AND (
               s1.arrival > (current_time AT TIME ZONE 'UTC' + interval '5 hours 30 minutes')::time

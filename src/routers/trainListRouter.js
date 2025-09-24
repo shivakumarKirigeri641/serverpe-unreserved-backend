@@ -5,6 +5,7 @@ const trainListRouter = express.Router();
 const checkUserAuthentication = require("../middleware/checkUserAuthentication");
 const { connectDB } = require("../database/connectDB");
 const getPostgreClient = require("../SQL/getPostgreClient");
+const insertSearchDetails = require("../SQL/insertSearchDetails");
 trainListRouter.post(
   "/unreserved-ticket/user/trains-list",
   checkUserAuthentication,
@@ -64,6 +65,8 @@ trainListRouter.post(
         src.toUpperCase(),
         dest.toUpperCase()
       );
+      //INSERT SEARCH DATA
+      await insertSearchDetails(client, req, src, dest);
       res.status(200).json({
         success: true,
         message: "stations fetched successfully",
