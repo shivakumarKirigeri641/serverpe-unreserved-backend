@@ -39,6 +39,7 @@ logoutRouter.post("/unreserved-ticket/user/logout", async (req, res) => {
         data: {},
       };
     }
+    res.cookie("token", null, { maxAge: 0 });
     res.status(200).json({
       success: true,
       message: "You have successfully logged-out!",

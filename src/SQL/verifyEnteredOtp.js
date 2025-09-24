@@ -12,7 +12,7 @@ const verifyEnteredOtp = async (client, mobile_number, otp) => {
       let hotp = result.rows[0].hashed_otp;
       const isvalidotp = await bcrypt.compare(otp, hotp);
       if (!isvalidotp) {
-        throw { status: false, err_message: "Invalid OTP!" };
+        throw { status: false, message: "Invalid OTP!", data: {} };
       } else {
         //checkf or otp expiry
         let now = new Date();
@@ -25,7 +25,8 @@ const verifyEnteredOtp = async (client, mobile_number, otp) => {
           await deleteOtpSession(client, mobile_number);
           throw {
             status: false,
-            err_message: "OTP is expired, please re-login!",
+            message: "OTP is expired, please re-login!",
+            data: {},
           };
         } else {
           await deleteOtpSession(client, mobile_number);
@@ -35,12 +36,14 @@ const verifyEnteredOtp = async (client, mobile_number, otp) => {
       await deleteOtpSession(client, mobile_number);
       throw {
         status: false,
-        err_message: "Mobile number not registered!",
+        message: "Mobile number not registered!",
+        data: {},
       };
     }
     return {
       status: true,
-      err_message: "",
+      message: "Mobile number and OTP verified successfully.",
+      data: {},
     };
   } catch (err) {
     throw err;

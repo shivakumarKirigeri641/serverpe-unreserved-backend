@@ -44,7 +44,8 @@ const checkUserAuthentication = async (req, res, next) => {
         await deleteTokenSession(client, token);
         throw {
           status: false,
-          err_message: "OTP is expired, please re-login!",
+          message: "OTP is expired, please re-login!",
+          data: {},
         };
       } else {
         await updateeTokenSession(client, token);

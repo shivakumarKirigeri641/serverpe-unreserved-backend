@@ -66,7 +66,7 @@ verifyOtpRouter.post("/unreserved-ticket/user/verify-otp", async (req, res) => {
     if (!result.status) {
       throw {
         success: false,
-        message: result?.err_message,
+        message: result?.message,
         data: {},
       };
     }
