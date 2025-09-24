@@ -1,12 +1,12 @@
 const express = require("express");
 const verifyMobileNumber = require("../utils/verifyMobileNumber");
-const getPostgreClient = require("../utils/getPostgreClient");
+const verifyOtpFormat = require("../utils/verifyOtpFormat");
+const getPostgreClient = require("../SQL/getPostgreClient");
+const verifyEnteredOtp = require("../SQL/verifyEnteredOtp");
 const getRandomOtp = require("../utils/getRandomOtp");
 const sendOTPSMS = require("../utils/sendOTPSMS");
 const sendOtpRouter = express.Router();
 require("dotenv").config();
-const sendFailedResponse = require("../responses/sendFailedResponse");
-const sendSuccessResponse = require("../responses/sendSuccessResponse");
 const insertOtpSessions = require("../SQL/insertOtpSessions");
 const { connectDB } = require("../database/connectDB");
 module.exports = {
@@ -14,10 +14,10 @@ module.exports = {
   verifyMobileNumber,
   connectDB,
   getPostgreClient,
+  verifyOtpFormat,
+  verifyEnteredOtp,
   getRandomOtp,
   sendOtpRouter,
-  sendFailedResponse,
-  sendSuccessResponse,
   insertOtpSessions,
   sendOTPSMS,
 };
