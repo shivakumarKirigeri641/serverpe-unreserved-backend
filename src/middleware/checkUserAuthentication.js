@@ -20,7 +20,7 @@ const checkUserAuthentication = async (req, res, next) => {
       };
     }
     const result = await jwt.verify(token, process.env.SECRET_KEY);
-    console.log(req.mobile_number);
+    console.log(result);
     const pool = await connectDB();
     client = await getPostgreClient(pool);
 
@@ -53,11 +53,10 @@ const checkUserAuthentication = async (req, res, next) => {
     } else {
       throw {
         success: false,
-        message: "Invalid session token!",
+        message: "Invalid session found!",
         data: {},
       };
     }
-    req.mobile_number = result.mobile_number;
     //now fetch token from db and compare and equal , check for last active timestamp
     next();
   } catch (err) {

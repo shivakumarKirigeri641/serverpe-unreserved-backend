@@ -8,8 +8,6 @@ const deleteTokenSessionOnMobile = async (client, mobile_number) => {
     await client.query("COMMIT");
   } catch (err) {
     await client.query("ROLLBACK");
-  } finally {
-    await client.release();
   }
 };
 module.exports = deleteTokenSessionOnMobile;
