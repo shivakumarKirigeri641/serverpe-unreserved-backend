@@ -13,18 +13,6 @@ bookTicketRouter.post(
   checkUserAuthentication,
   async (req, res) => {
     let client = null;
-    /**
-     body will be like this:
-     train_number:12345,
-     src:'ypr',
-     dest:'ubl',
-     adults:1,
-     children:0,
-     physicallyhandicaped:false,
-     total_fare:333,
-     paytype:0
-     <dateof journey> you need to get arrival time of train on selected source and that will be date & tiem of journey, 
-    */
     try {
       const {
         train_number,

@@ -13,7 +13,6 @@ trainListRouter.post(
     let client = null;
     try {
       const { src, dest } = req.body;
-      console.log(req.body);
       if (!src) {
         throw {
           err_details: {

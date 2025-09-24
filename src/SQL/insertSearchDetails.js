@@ -37,7 +37,6 @@ const insertSearchDetails = async (
         new Date(),
       ]
     );
-    console.log("test");
     await client.query("COMMIT");
   } catch (err) {
     await client.query("ROLLBACK");
