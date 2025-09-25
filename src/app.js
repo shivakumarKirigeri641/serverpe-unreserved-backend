@@ -6,6 +6,7 @@ const cookieParser = require("cookie-parser");
 const sendOtpRouter = require("./routers/sendOtpRouter");
 const verifyOtpRouter = require("./routers/verifyOtpRouter");
 const stationsRouter = require("./routers/stationsRouter");
+const runOtpSessionExpiry = require("./crons/runOtpSessionExpiry");
 const logoutRouter = require("./routers/logoutRouter");
 const trainListRouter = require("./routers/trainListRouter");
 const bookTicketRouter = require("./routers/bookTicketRouter");
@@ -15,7 +16,7 @@ app.use(cookieParser());
 app.use(express.json());
 app.use(
   cors({
-    origin: "http://localhost:1234",
+    origin: process.env.UIURL,
     credentials: true,
   })
 );
